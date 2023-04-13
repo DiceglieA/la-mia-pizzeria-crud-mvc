@@ -5,6 +5,7 @@ namespace la_mia_pizzeria_static.Models
     public class PizzeriaContext : DbContext
     {
         public DbSet<Pizza> Pizzas { get; set; }
+        public DbSet<Categoria>? Categories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -14,7 +15,7 @@ namespace la_mia_pizzeria_static.Models
         {
             if (!Pizzas.Any())
             {
-                var seed = new Pizza[]
+                var pizzaseed = new Pizza[]
                 {
                     new Pizza
                     {
@@ -59,7 +60,33 @@ namespace la_mia_pizzeria_static.Models
                         Price = 8,
                     }
                 };
-                Pizzas.AddRange(seed);
+                Pizzas.AddRange(pizzaseed);
+            }
+            if (!Categories.Any())
+            {
+                var seed = new Categoria[]
+                {
+                        new Categoria
+                        {
+                            Name = "Classica",
+
+                        },
+                        new Categoria
+                        {
+                            Name = "Bianca"
+                        },
+                        new Categoria
+                        {
+                            Name = "Vegetariana"
+                        },
+                        new Categoria
+                        {
+                            Name = "Pizze di mare"
+                        }
+
+                };
+                Categories.AddRange(seed);
+
 
                 SaveChanges();
             }

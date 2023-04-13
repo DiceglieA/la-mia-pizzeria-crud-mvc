@@ -25,5 +25,8 @@ namespace la_mia_pizzeria_static.Models
         [Required(ErrorMessage = "Campo obbligatorio")]
         [MoreThenZeroPrice]
         public int Price { get; set; }
+
+        public int? CategoriaId { get; set; }
+        public Categoria? Categoria { get; set; }
     }
 }
