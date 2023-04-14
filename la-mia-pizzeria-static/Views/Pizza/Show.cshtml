@@ -19,6 +19,18 @@
                     <span>Non classificata</span>
                 }
             </div>
+            <div>
+                Gli ngredienti sono:
+                @foreach (Ingrediente ingrediente in pizza.Ingredients)
+                {
+                    <ul>
+                        <li>
+                            @ingrediente.Name
+                        </li>
+                    </ul>
+                }
+            </div>
+
             <a href="@Url.Action("Index", "Pizza")" class="btn btn-primary">Torna alla Home</a>
         </div>
     </div>

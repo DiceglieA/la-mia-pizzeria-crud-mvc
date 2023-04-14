@@ -1,5 +1,6 @@
 ﻿using la_mia_pizzeria_static.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -30,11 +31,17 @@ namespace la_mia_pizzeria_static.Controllers
         {
             using var ctx = new PizzeriaContext();
             List<Categoria> categories = ctx.Categories.ToList();
-
             PizzaFormModel model = new PizzaFormModel();
+            List<SelectListItem> listIngrediente = new List<SelectListItem>();
 
+            foreach (Ingrediente ingrediente in ctx.Ingredients)
+            {
+                listIngrediente.Add(new SelectListItem()
+                { Text = ingrediente.Name, Value = ingrediente.Id.ToString() });
+            }
             model.Pizza = new Pizza();
             model.Categories = categories;
+            model.Ingredients = listIngrediente;
             return View("Create", model);
         }
 
@@ -50,8 +57,17 @@ namespace la_mia_pizzeria_static.Controllers
             {
                 using (ctx = new PizzeriaContext())
                 {
+                    List<Ingrediente> ingredients = ctx.Ingredients.ToList();
+                    List<SelectListItem> listIngrediente = new List<SelectListItem>();
+                    foreach (Ingrediente ingrediente in ingredients)
+                    {
+                        listIngrediente.Add(
+                            new SelectListItem()
+                            { Text = ingrediente.Name, Value = ingrediente.Id.ToString() });
+                    }
                     List<Categoria> categories = ctx.Categories.ToList();
                     data.Categories = categories;
+                    data.Ingredients = listIngrediente;
                     return View("Create", data);
                 }
             }
@@ -63,6 +79,18 @@ namespace la_mia_pizzeria_static.Controllers
                 pizzaToCreate.Foto = data.Pizza.Foto;
                 pizzaToCreate.Price = data.Pizza.Price;
                 pizzaToCreate.CategoriaId = data.Pizza.CategoriaId;
+                if (data.SelectedIngredients != null)
+                {
+                    foreach (string selectedIngredienteId in data.SelectedIngredients)
+                    {
+                        int selectedIntIngredienteId = int.Parse(selectedIngredienteId);
+                        Ingrediente? ingrediente = ctx.Ingredients
+                                                   .Where(m => m.Id == selectedIntIngredienteId)
+                                                   .FirstOrDefault();
+                        pizzaToCreate.Ingredients.Add(ingrediente);
+
+                    }
+                }
                 ctx.Pizzas.Add(pizzaToCreate);
                 ctx.SaveChanges();
                 return RedirectToAction("Index");
@@ -126,6 +154,7 @@ namespace la_mia_pizzeria_static.Controllers
             using var ctx = new PizzeriaContext();
             var pizza = ctx.Pizzas
                 .Include(p => p.Categoria)
+                .Include(p => p.Ingredients)
                 .SingleOrDefault(p => p.Id == id);
 
             if (pizza == null)

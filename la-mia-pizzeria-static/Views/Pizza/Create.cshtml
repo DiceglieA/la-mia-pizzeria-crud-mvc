@@ -50,6 +50,16 @@
                 <span asp-validation-for="Pizza.Price" class="text-danger"></span>
             </div>
 
+            <div class="mb-3">
+                <label asp-for="Pizza.Ingredients"></label>
+                <select asp-for="SelectedIngredients"
+                        multiple
+                        size="7"
+                        class="form-control"
+                        asp-items="@pizzaform.Ingredients">
+                </select>
+            </div>
+
             <button type="submit" class="btn btn-success">Create</button>
         </form>
     </div>

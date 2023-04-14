@@ -28,6 +28,10 @@ namespace la_mia_pizzeria_static.Models
 
         public int? CategoriaId { get; set; }
         public Categoria? Categoria { get; set; }
-        public IEnumerable<Ingrediente> Ingridients { get; set; }
+        public List<Ingrediente> Ingredients { get; set; }
+        public Pizza()
+        {
+            this.Ingredients = new List<Ingrediente>();
+        }
     }
 }

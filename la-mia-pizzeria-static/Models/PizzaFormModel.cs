@@ -1,9 +1,12 @@
-﻿namespace la_mia_pizzeria_static.Models
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace la_mia_pizzeria_static.Models
 {
     public class PizzaFormModel
     {
         public Pizza Pizza { get; set; }
         public List<Categoria>? Categories { get; set; }
-        public List<Ingrediente> Ingridients { get; set; } 
+        public List<Ingrediente> Ingredients { get; set; }
+        public List<string>? SelectedIngredients { get; set; }
     }
 }
