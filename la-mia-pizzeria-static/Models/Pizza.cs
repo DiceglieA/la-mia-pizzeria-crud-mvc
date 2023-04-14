@@ -28,5 +28,6 @@ namespace la_mia_pizzeria_static.Models
 
         public int? CategoriaId { get; set; }
         public Categoria? Categoria { get; set; }
+        public IEnumerable<Ingrediente> Ingridients { get; set; }
     }
 }

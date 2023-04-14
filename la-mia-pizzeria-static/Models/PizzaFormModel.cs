@@ -4,5 +4,6 @@
     {
         public Pizza Pizza { get; set; }
         public List<Categoria>? Categories { get; set; }
+        public List<Ingrediente> Ingridients { get; set; } 
     }
 }

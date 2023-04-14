@@ -124,8 +124,6 @@ namespace la_mia_pizzeria_static.Controllers
         public IActionResult Show(int id)
         {
             using var ctx = new PizzeriaContext();
-
-
             var pizza = ctx.Pizzas
                 .Include(p => p.Categoria)
                 .SingleOrDefault(p => p.Id == id);
@@ -134,7 +132,6 @@ namespace la_mia_pizzeria_static.Controllers
             {
                 return NotFound();
             }
-
 
             return View(pizza);
         }
