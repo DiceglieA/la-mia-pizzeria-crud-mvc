@@ -1,6 +1,8 @@
 ﻿using la_mia_pizzeria_static.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace la_mia_pizzeria_static.Controllers
 {
@@ -50,25 +52,32 @@ namespace la_mia_pizzeria_static.Controllers
         [HttpGet]
         public IActionResult Update(int id)
         {
-            using var ctx = new PizzeriaContext();
-
-            var pizza = ctx.Pizzas.FirstOrDefault(p => p.Id == id);
-
-            if (pizza == null)
+            using PizzeriaContext ctx = new PizzeriaContext();
+            Pizza? pizzaToUpdate = ctx.Pizzas.FirstOrDefault(p => p.Id == id);
+            if (pizzaToUpdate == null)
             {
                 return NotFound();
             }
-
-            return View(pizza);
+            else
+            {
+                List<Categoria> categories = ctx.Categories.ToList();
+                PizzaFormModel model = new PizzaFormModel();
+                model.Pizza = pizzaToUpdate;
+                model.Categories = categories;
+                return View(model);
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(int id, Pizza pizza)
+        public IActionResult Update(int id, PizzaFormModel data)
         {
             if (!ModelState.IsValid)
             {
-                return View(pizza);
+                using PizzeriaContext context = new PizzeriaContext();
+                List<Categoria> categories = context.Categories.ToList();
+                data.Categories = categories;
+                return View("Update", data);
             }
             using var ctx = new PizzeriaContext();
 
@@ -78,10 +87,11 @@ namespace la_mia_pizzeria_static.Controllers
             {
                 return NotFound();
             }
-            pizzaEdit.Name = pizza.Name;
-            pizzaEdit.Description = pizza.Description;
-            pizzaEdit.Price = pizza.Price;
-            pizzaEdit.Foto = pizza.Foto;
+            pizzaEdit.Name = data.Pizza.Name;
+            pizzaEdit.Description = data.Pizza.Description;
+            pizzaEdit.Price = data.Pizza.Price;
+            pizzaEdit.Foto = data.Pizza.Foto;
+            pizzaEdit.CategoriaId = data.Pizza.CategoriaId;
 
             ctx.SaveChanges();
 
@@ -93,7 +103,16 @@ namespace la_mia_pizzeria_static.Controllers
         {
             using var ctx = new PizzeriaContext();
 
-            var pizza = ctx.Pizzas.Single(p => p.Id == id);
+
+            var pizza = ctx.Pizzas
+                .Include(p => p.Categoria)
+                .SingleOrDefault(p => p.Id == id);
+
+            if (pizza == null)
+            {
+                return NotFound();
+            }
+
 
             return View(pizza);
         }
