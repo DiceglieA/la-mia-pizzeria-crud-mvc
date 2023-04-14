@@ -28,23 +28,45 @@ namespace la_mia_pizzeria_static.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View("Create");
+            using var ctx = new PizzeriaContext();
+            List<Categoria> categories = ctx.Categories.ToList();
+
+            PizzaFormModel model = new PizzaFormModel();
+
+            model.Pizza = new Pizza();
+            model.Categories = categories;
+            return View("Create", model);
         }
 
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Pizza pizza)
+        public IActionResult Create(PizzaFormModel data)
         {
+            var ctx = new PizzeriaContext();
+
             if (!ModelState.IsValid)
             {
-                return View("Create", pizza);
+                using (ctx = new PizzeriaContext())
+                {
+                    List<Categoria> categories = ctx.Categories.ToList();
+                    data.Categories = categories;
+                    return View("Create", data);
+                }
             }
-            using var ctx = new PizzeriaContext();
-            ctx.Pizzas.Add(pizza);
-            ctx.SaveChanges();
-            return RedirectToAction("Index");
+            using (ctx = new PizzeriaContext())
+            {
+                Pizza pizzaToCreate = new Pizza();
+                pizzaToCreate.Name = data.Pizza.Name;
+                pizzaToCreate.Description = data.Pizza.Description;
+                pizzaToCreate.Foto = data.Pizza.Foto;
+                pizzaToCreate.Price = data.Pizza.Price;
+                pizzaToCreate.CategoriaId = data.Pizza.CategoriaId;
+                ctx.Pizzas.Add(pizzaToCreate);
+                ctx.SaveChanges();
+                return RedirectToAction("Index");
+            }
         }
 
         //funzione edit + validazioni
