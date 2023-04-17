@@ -11,7 +11,7 @@ namespace la_mia_pizzeria_static.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Ingridients",
+                name: "Ingredients",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -20,23 +20,23 @@ namespace la_mia_pizzeria_static.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ingridients", x => x.Id);
+                    table.PrimaryKey("PK_Ingredients", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "IngredientePizza",
                 columns: table => new
                 {
-                    IngridientsId = table.Column<int>(type: "int", nullable: false),
+                    IngredientsId = table.Column<int>(type: "int", nullable: false),
                     pizzasId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IngredientePizza", x => new { x.IngridientsId, x.pizzasId });
+                    table.PrimaryKey("PK_IngredientePizza", x => new { x.IngredientsId, x.pizzasId });
                     table.ForeignKey(
-                        name: "FK_IngredientePizza_Ingridients_IngridientsId",
-                        column: x => x.IngridientsId,
-                        principalTable: "Ingridients",
+                        name: "FK_IngredientePizza_Ingredients_IngredientsId",
+                        column: x => x.IngredientsId,
+                        principalTable: "Ingredients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -60,7 +60,7 @@ namespace la_mia_pizzeria_static.Migrations
                 name: "IngredientePizza");
 
             migrationBuilder.DropTable(
-                name: "Ingridients");
+                name: "Ingredients");
         }
     }
 }

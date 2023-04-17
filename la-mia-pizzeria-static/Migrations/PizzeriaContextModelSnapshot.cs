@@ -24,13 +24,13 @@ namespace la_mia_pizzeria_static.Migrations
 
             modelBuilder.Entity("IngredientePizza", b =>
                 {
-                    b.Property<int>("IngridientsId")
+                    b.Property<int>("IngredientsId")
                         .HasColumnType("int");
 
                     b.Property<int>("pizzasId")
                         .HasColumnType("int");
 
-                    b.HasKey("IngridientsId", "pizzasId");
+                    b.HasKey("IngredientsId", "pizzasId");
 
                     b.HasIndex("pizzasId");
 
@@ -69,7 +69,7 @@ namespace la_mia_pizzeria_static.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingridients");
+                    b.ToTable("Ingredients");
                 });
 
             modelBuilder.Entity("la_mia_pizzeria_static.Models.Pizza", b =>
@@ -113,7 +113,7 @@ namespace la_mia_pizzeria_static.Migrations
                 {
                     b.HasOne("la_mia_pizzeria_static.Models.Ingrediente", null)
                         .WithMany()
-                        .HasForeignKey("IngridientsId")
+                        .HasForeignKey("IngredientsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
